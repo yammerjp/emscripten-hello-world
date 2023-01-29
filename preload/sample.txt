@@ -1,0 +1,5 @@
+hello, wolrd!
+
+This file will be packaged by emscription.
+
+https://emscripten.org/docs/porting/files/packaging_files.html#preloading-files

@@ -40,13 +40,6 @@ void output_file(char *path) {
     die(path);
 }
 
-int main(int argc, char* argv[]) {
-  if (argc < 2) {
-    output_fd(STDIN_FILENO, "/dev/stdin");
-    return 0;
-  }
-
-  for (int file_num = 1; file_num < argc; file_num++) {
-    output_file(argv[file_num]);
-  }
+int main() {
+  output_file("preload/sample.txt");
 }
