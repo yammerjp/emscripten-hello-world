@@ -1,5 +1,6 @@
-.PHONY:
-# https://ktrysmt.github.io/blog/write-useful-help-command-by-shell/
-build-cat: ## print this message ## make help
-	emcc cat.c -o dist/file.html --preload-file preload
-
+build-cat:
+	emcc cat.c -o dist.js --preload-file preload
+	mv dist.* public/
+run:
+	make build-cat
+	cd public && python3 -m http.server 8888
