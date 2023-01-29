@@ -1,5 +1,5 @@
+FROM emscripten/emsdk
 # https://gist.github.com/yammerjp/a7877bf2f8de9ec99dd08a87e7dd0efb
-FROM ubuntu:20.04
 WORKDIR /root
 # apt-get installでtzdataがインストールされるときにタイムゾーンを聞かれるの でいい感じに回避
 ENV DEBIAN_FRONTEND=noninteractive
