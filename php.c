@@ -1,4 +1,6 @@
+#define HAVE__CONTROLFP
 #include <sapi/embed/php_embed.h>
+#include <emscripten/emscripten.h>
 
 int main(int argc, char **argv)
 {
