@@ -1,5 +1,5 @@
 build-cat:
-	emcc cat.c -o dist.js --preload-file preload
+	emcc cat.c -o dist.js --embed-file preload/sample.txt
 	mv dist.* public/
 run:
 	make build-cat

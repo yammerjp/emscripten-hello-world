@@ -1,0 +1,51 @@
+# https://gist.github.com/yammerjp/a7877bf2f8de9ec99dd08a87e7dd0efb
+FROM ubuntu:20.04
+WORKDIR /root
+# apt-get installでtzdataがインストールされるときにタイムゾーンを聞かれるの でいい感じに回避
+ENV DEBIAN_FRONTEND=noninteractive
+RUN echo 'tzdata tzdata/Areas select Asia' | debconf-set-selections
+RUN echo 'tzdata tzdata/Zones/Europe select Tokyo' | debconf-set-selections
+# git以外はPHPのREADMEをみて必要そうなのでいれておく \
+RUN apt-get update && \
+  apt-get upgrade -y && \
+  apt-get install -y \
+    git \
+    pkg-config \
+    build-essential \
+    autoconf \
+    bison \
+    re2c \
+    libxml2-dev \
+    libsqlite3-dev && \
+  rm -rf /var/lib/apt/lists/*
+RUN git clone https://github.com/php/php-src.git
+WORKDIR /root/php-src
+RUN git checkout php-7.4.30
+RUN ./buildconf --force # forceをつけないと進めなかった
+RUN ./configure --enable-embed
+RUN make install
+
+WORKDIR /root
+RUN apt-get update && \
+  apt-get upgrade -y && \
+  apt-get install -y \
+    python3 \
+    python3-distutils \
+    git \
+    gcc \
+    clang \
+    cmake && \
+  rm -rf /var/lib/apt/lists/*
+RUN git clone https://github.com/emscripten-core/emsdk.git
+WORKDIR /root/emsdk
+RUN ./emsdk install 1.38.45
+RUN ./emsdk activate 1.38.45
+RUN echo "#!/bin/bash\n. /root/emsdk/emsdk_env.sh\nexec /bin/bash $@" > /usr/local/bin/bash-emsdk
+RUN chmod a+x /usr/local/bin/bash-emsdk
+RUN ln -s $(which python3) /usr/local/bin/python
+RUN apt-get update && \
+  apt-get upgrade -y && \
+  apt-get install -y \
+    lld-10 binfmt-support clang clang-10 lib32gcc-s1 lib32stdc++6 libc6-i386 libclang-common-10-dev libclang-cpp10 libclang1-10 libgc1c2 libobjc-9-dev libobjc4 libomp-10-dev libomp5-10 libpfm4 libz3-4 libz3-dev llvm-10 llvm-10-dev llvm-10-runtime llvm-10-tools python3-pygments && \
+  rm -rf /var/lib/apt/lists/*
+
